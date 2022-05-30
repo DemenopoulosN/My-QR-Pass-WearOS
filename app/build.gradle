@@ -40,7 +40,7 @@ dependencies {
     //noinspection GradleCompatible
     implementation('androidx.appcompat:appcompat:1.0.0')
 
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.2'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.4'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
 
     implementation("androidx.browser:browser:1.4.0")
@@ -50,5 +50,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.1.0'
+
+
 
 }

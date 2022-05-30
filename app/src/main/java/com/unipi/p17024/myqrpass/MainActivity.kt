@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.FirebaseException
@@ -197,24 +196,28 @@ class MainActivity : Activity() {
                 val firebaseUser = firebaseAuth.currentUser
                 val userID = firebaseUser?.uid
 
-                //saving userID to Shared Preferences
-                val editor = Companion.sharedPreferencesMain.edit()
-                editor.putString("userID", userID)
-                editor.apply()
+
 
                 //putting user's data into database
                 if (userID != null) {
-                    databaseRef.child("Clients").child(userID).child("Name").setValue("")
-                };
-                if (userID != null) {
-                    databaseRef.child("Clients").child(userID).child("Surname").setValue("")
-                };
-                if (userID != null) {
-                    databaseRef.child("Clients").child(userID).child("Valid Subscription").setValue("yes")
-                };
-                if (userID != null) {
-                    databaseRef.child("Clients").child(userID).child("Phone").setValue(phone)
-                };
+                    val myRef: DatabaseReference = databaseRef.child("Tokens").push()
+                    val token = myRef.key
+
+                    //saving key to Shared Preferences
+                    val editor = sharedPreferencesMain.edit()
+                    editor.putString("token", token)
+                    editor.apply()
+
+                    if (token != null) {
+                        databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
+                        databaseRef.child("Tokens").child(token).child("timestamp").setValue(System.currentTimeMillis())
+
+                        databaseRef.child("Clients").child(userID).child("Valid Subscription").setValue("yes")
+                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Name").setValue("")
+                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Surname").setValue("")
+                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Phone").setValue(phone)
+                    }
+                }
 
                 //starting QrGeneratorActivity
                 val intent = Intent(this, QrGeneratorActivity::class.java)

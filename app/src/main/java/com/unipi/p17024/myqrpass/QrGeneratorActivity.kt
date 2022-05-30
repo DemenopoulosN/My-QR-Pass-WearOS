@@ -1,11 +1,10 @@
 package com.unipi.p17024.myqrpass
 
 import android.app.Activity
-import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +16,7 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.unipi.p17024.myqrpass.MainActivity.Companion.sharedPreferencesMain
 import com.unipi.p17024.myqrpass.databinding.ActivityQrGeneratorBinding
+
 
 class QrGeneratorActivity : Activity() {
     private lateinit var binding: ActivityQrGeneratorBinding
@@ -35,17 +35,28 @@ class QrGeneratorActivity : Activity() {
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smart-e-tickets-android-wearos-default-rtdb.firebaseio.com/")
 
         //reading userID from Shared Preferences
-        val userId = sharedPreferencesMain.getString("userID","default")
-        Toast.makeText(this, userId, Toast.LENGTH_SHORT).show()
+        val token = sharedPreferencesMain.getString("token","default")
+        Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
 
         firebaseAuth = FirebaseAuth.getInstance()
-        val firebaseUser = firebaseAuth.currentUser
-        val phone = firebaseUser?.phoneNumber
-        //val userID = firebaseUser?.uid
-
+        //val firebaseUser = firebaseAuth.currentUser
+        //val phone = firebaseUser?.phoneNumber
 
         //Updating imageView's image by calling function for creating the QRCode
-        binding.qrOutput.setImageBitmap(generateQRCode(userId))
+        binding.qrOutput.setImageBitmap(generateQRCode(token))
+
+        //
+        // Delete token child after elapsed time
+        //
+        /*
+        Handler(Looper.getMainLooper()).postDelayed({
+            //Do something after 100ms
+            if (token != null) {
+                databaseRef.child("Tokens").child(token).removeValue()
+            }
+        }, 20000) //10 seconds
+
+         */
     }
 
     private fun generateQRCode(inputText: String?): Bitmap? {

@@ -1,13 +1,19 @@
 package com.unipi.p17024.myqrpass
 
 import android.app.Activity
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.unipi.p17024.myqrpass.databinding.ActivityPasscodeBinding
+
 
 class PasscodeActivity : Activity() {
     private lateinit var binding: ActivityPasscodeBinding
@@ -101,6 +107,137 @@ class PasscodeActivity : Activity() {
                 startActivity(intent)
             }
         }
+
+        //
+        // Moving to next editText quickly
+        //
+        binding.editTextNumberPassword1.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPassword1.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPassword1.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPassword2.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPassword2.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPassword2.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPassword3.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPassword3.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPassword3.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPassword4.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPassword4.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPassword4.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberConfirm1.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberConfirm1.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberConfirm1.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberConfirm2.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberConfirm2.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberConfirm2.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberConfirm3.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberConfirm3.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberConfirm3.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberConfirm4.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberConfirm4.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberConfirm4.hideKeyboard()
+                }
+            }
+        })
     }
 
     fun temporary(){
@@ -112,5 +249,10 @@ class PasscodeActivity : Activity() {
 
         //read data from sharedPreferences
         val passcode = sharedPreferences.getInt("passcode", 0)
+    }
+
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 }
