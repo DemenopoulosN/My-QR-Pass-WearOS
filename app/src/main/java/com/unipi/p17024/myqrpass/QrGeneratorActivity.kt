@@ -1,6 +1,7 @@
 package com.unipi.p17024.myqrpass
 
 import android.app.Activity
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
@@ -25,6 +26,7 @@ class QrGeneratorActivity : Activity() {
 
     private lateinit var databaseRef: DatabaseReference
 
+    private lateinit var sharedPreferencesMain: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,31 +34,43 @@ class QrGeneratorActivity : Activity() {
         binding = ActivityQrGeneratorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smart-e-tickets-android-wearos-default-rtdb.firebaseio.com/")
+        MainActivity.sharedPreferencesMain = getSharedPreferences("sharedPreferencesMain", MODE_PRIVATE)
 
-        //reading userID from Shared Preferences
-        val token = sharedPreferencesMain.getString("token","default")
-        Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
+        val identifier = intent.getStringExtra("Identifier");
+        if(identifier.equals("From_Activity_MainActivity")) {
+            //reading token from Shared Preferences
+            val tokenFromMain = sharedPreferencesMain.getString("token","default")
+            //Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        //val firebaseUser = firebaseAuth.currentUser
-        //val phone = firebaseUser?.phoneNumber
+            //Updating imageView's image by calling function for creating the QRCode
+            binding.qrOutput.setImageBitmap(generateQRCode(tokenFromMain))
+        }
+        else{
+            databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smart-e-tickets-android-wearos-default-rtdb.firebaseio.com/")
+            firebaseAuth = FirebaseAuth.getInstance()
+            val firebaseUser = firebaseAuth.currentUser
+            val phone = firebaseUser?.phoneNumber
 
-        //Updating imageView's image by calling function for creating the QRCode
-        binding.qrOutput.setImageBitmap(generateQRCode(token))
+            val userID = intent.getStringExtra("userID").toString()
+            val myRef: DatabaseReference = databaseRef.child("Tokens").push()
+            val token = myRef.key
+            //Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
 
-        //
-        // Delete token child after elapsed time
-        //
-        /*
-        Handler(Looper.getMainLooper()).postDelayed({
-            //Do something after 100ms
             if (token != null) {
-                databaseRef.child("Tokens").child(token).removeValue()
-            }
-        }, 20000) //10 seconds
+                databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
+                databaseRef.child("Tokens").child(token).child("timestamp").setValue(System.currentTimeMillis())
 
-         */
+                databaseRef.child("Clients").child(userID).child("Valid Subscription").setValue("yes")
+                databaseRef.child("Clients").child(userID).child("Personal Data").child("Name").setValue("")
+                databaseRef.child("Clients").child(userID).child("Personal Data").child("Surname").setValue("")
+                databaseRef.child("Clients").child(userID).child("Personal Data").child("Phone").setValue(phone)
+            }
+
+
+            //Updating imageView's image by calling function for creating the QRCode
+            binding.qrOutput.setImageBitmap(generateQRCode(token))
+        }
+
     }
 
     private fun generateQRCode(inputText: String?): Bitmap? {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme"
+        parent=
+            "Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">
+            @color/colorPrimary</item>
+        <item name="colorPrimaryDark">
+            @color/colorPrimaryDark</item>
+        <item name="colorAccent">
+            @color/colorAccent</item>
+    </style>
+
+
+    <!-- My Button theme -->
+    <style name="MyButton1"
+        parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">
+            @color/yellow</item>
+        <item name="colorButtonNormal">
+            @color/hotPink</item>
+    </style>
+
+
+    <style name="MyButton2"
+        parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">
+            @color/red</item>
+        <item name="colorButtonNormal">
+            @color/teal_300</item>
+    </style>
+
+    <style name="MyButton3"
+        parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">
+            @color/yellow_900</item>
+    </style>
+
+    <style name="MyButton4"
+        parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">
+            @color/yellow_A200</item>
+        <item name="colorButtonNormal">
+            @color/white</item>
+    </style>
+
+    <style name="MyButton5"
+        parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">
+            @color/lime</item>
+        <item name="colorButtonNormal">
+            @color/white</item>
+    </style>
+</resources>

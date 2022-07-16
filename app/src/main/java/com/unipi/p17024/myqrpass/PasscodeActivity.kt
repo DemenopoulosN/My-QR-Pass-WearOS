@@ -12,17 +12,16 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.unipi.p17024.myqrpass.MainActivity.Companion.sharedPreferencesMain
 import com.unipi.p17024.myqrpass.databinding.ActivityPasscodeBinding
 
 
-class PasscodeActivity : Activity() {
+class PasscodeActivity : Activity(){
     private lateinit var binding: ActivityPasscodeBinding
-
-    //private val sharedPreferences = this@PasscodeActivity.getPreferences(Context.MODE_PRIVATE)
-    //var context: Context? = this@PasscodeActivity
 
     //sharedPreferences
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferencesPasscode: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +30,26 @@ class PasscodeActivity : Activity() {
         setContentView(binding.root)
 
         //initializing sharedPreferences
-        sharedPreferences = getPreferences(MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE)
+        sharedPreferencesPasscode = getSharedPreferences("sharedPreferencesPasscode", MODE_PRIVATE)
 
+        //getting values from Main's sharedPreferences
+        val userID = sharedPreferencesPasscode.getString("userID","default")
+        val timestamp = sharedPreferencesPasscode.getLong("timestamp",1L)
+        //Toast.makeText(this, userID, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, timestamp.toString(), Toast.LENGTH_SHORT).show()
+
+
+        /* For showing whole process
         val editor = sharedPreferences.edit()
         editor.remove("passcode")
         editor.apply()
-        val passcode = sharedPreferences.getInt("passcode", 0)
-        if(passcode != 0){
+         */
+
+        val passcode = sharedPreferences.getInt("passcode", 0) // initializing passcode field
+        if(passcode != 0){ // if a pin has been created -> display second screen
             binding.textTitle.isVisible = false
+            binding.textTitle1.isVisible = false
             binding.textTitle3.isVisible = true
             binding.editTextNumberPassword1.isVisible = false
             binding.editTextNumberPassword2.isVisible = false
@@ -60,6 +71,7 @@ class PasscodeActivity : Activity() {
             }
             else{
                 binding.textTitle.isVisible = false
+                binding.textTitle1.isVisible = false
                 binding.textTitle2.isVisible = true
                 binding.editTextNumberPassword1.isVisible = false
                 binding.editTextNumberPassword2.isVisible = false
@@ -82,7 +94,7 @@ class PasscodeActivity : Activity() {
                 Toast.makeText(this, "PIN not correct",Toast.LENGTH_SHORT).show()
             }
             else{
-                //val editor = sharedPreferences.edit()
+                val editor = sharedPreferences.edit()
                 val pin: Int = Integer.valueOf(binding.editTextNumberConfirm1.text.toString()+binding.editTextNumberConfirm2.text.toString()+binding.editTextNumberConfirm3.text.toString()+binding.editTextNumberConfirm4.text.toString())
                 //Toast.makeText(this, pin.toString(), Toast.LENGTH_SHORT).show()
                 editor.putInt("passcode", pin)
@@ -102,9 +114,18 @@ class PasscodeActivity : Activity() {
                 Toast.makeText(this, "PIN not correct",Toast.LENGTH_SHORT).show()
             }
             else{
-                //starting QrGeneratorActivity
-                val intent = Intent(this, QrGeneratorActivity::class.java)
-                startActivity(intent)
+                if((System.currentTimeMillis().minus(timestamp)) < 2629800000){ // if old login date is less than 31 days
+                    //starting QrGeneratorActivity
+                    val intent = Intent(this, QrGeneratorActivity::class.java)
+                    intent.putExtra("userID", userID)
+                    intent.putExtra("Identifier", "From_Activity_PasscodeActivity")
+                    startActivity(intent)
+                }
+                else{
+                    //starting MainActivity
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
 
@@ -113,11 +134,9 @@ class PasscodeActivity : Activity() {
         //
         binding.editTextNumberPassword1.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -129,11 +148,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberPassword2.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -145,11 +162,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberPassword3.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -161,11 +176,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberPassword4.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -177,11 +190,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberConfirm1.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -193,11 +204,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberConfirm2.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -209,11 +218,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberConfirm3.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -225,11 +232,9 @@ class PasscodeActivity : Activity() {
 
         binding.editTextNumberConfirm4.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -238,17 +243,6 @@ class PasscodeActivity : Activity() {
                 }
             }
         })
-    }
-
-    fun temporary(){
-        //write data to sharedPreferences
-        val editor = sharedPreferences.edit()
-        editor.putInt("passcode", 1234)
-        editor.apply()
-
-
-        //read data from sharedPreferences
-        val passcode = sharedPreferences.getInt("passcode", 0)
     }
 
     fun View.hideKeyboard() {

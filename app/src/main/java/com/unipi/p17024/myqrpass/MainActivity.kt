@@ -36,6 +36,8 @@ class MainActivity : Activity() {
     //progress dialog
     private  lateinit var progressDialog: ProgressDialog
 
+    private lateinit var sharedPreferencesPasscode: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -44,8 +46,11 @@ class MainActivity : Activity() {
         firebaseAuth = FirebaseAuth.getInstance()
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smart-e-tickets-android-wearos-default-rtdb.firebaseio.com/")
 
-        //watch companion object -> line 216
-        sharedPreferencesMain = getPreferences(MODE_PRIVATE)
+        //see companion object -> line 216
+        sharedPreferencesMain = getSharedPreferences("sharedPreferencesMain", MODE_PRIVATE)
+
+        //initializing sharedPreferences
+        sharedPreferencesPasscode = getSharedPreferences("sharedPreferencesPasscode", MODE_PRIVATE)
 
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please Wait")
@@ -203,10 +208,14 @@ class MainActivity : Activity() {
                     val myRef: DatabaseReference = databaseRef.child("Tokens").push()
                     val token = myRef.key
 
-                    //saving key to Shared Preferences
+                    //saving token to Shared Preferences(+ userID & timestamp for passcode activity)
                     val editor = sharedPreferencesMain.edit()
+                    val editor2 = sharedPreferencesPasscode.edit()
                     editor.putString("token", token)
+                    editor2.putString("userID",userID)
+                    editor2.putLong("timestamp",System.currentTimeMillis())
                     editor.apply()
+                    editor2.apply()
 
                     if (token != null) {
                         databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
@@ -221,6 +230,7 @@ class MainActivity : Activity() {
 
                 //starting QrGeneratorActivity
                 val intent = Intent(this, QrGeneratorActivity::class.java)
+                intent.putExtra("Identifier", "From_Activity_MainActivity")
                 startActivity(intent)
             }
             .addOnFailureListener { e ->
