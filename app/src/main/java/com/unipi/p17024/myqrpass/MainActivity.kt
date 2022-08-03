@@ -107,6 +107,7 @@ class MainActivity : Activity() {
                 startPhoneNumberVerification(phone)
             }
         }
+
         //resendCode button onclick: (if code wasn't received) resend otp
         binding.text4.setOnClickListener {
             //resend phone number
@@ -119,6 +120,7 @@ class MainActivity : Activity() {
                 resendVerificationCode(phone, forceResendingToken)
             }
         }
+
         //submit button onclick: input verification code, validate, verify phone number with verification code
         binding.buttonPhone2.setOnClickListener {
             //input verification code
@@ -197,11 +199,8 @@ class MainActivity : Activity() {
                 val phone = firebaseAuth.currentUser?.phoneNumber
                 Toast.makeText(this, "Logged in as $phone", Toast.LENGTH_SHORT).show()
 
-
                 val firebaseUser = firebaseAuth.currentUser
                 val userID = firebaseUser?.uid
-
-
 
                 //putting user's data into database
                 if (userID != null) {

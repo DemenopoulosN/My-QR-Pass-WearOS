@@ -19,7 +19,7 @@ import com.unipi.p17024.myqrpass.databinding.ActivityPasscodeBinding
 class PasscodeActivity : Activity(){
     private lateinit var binding: ActivityPasscodeBinding
 
-    //sharedPreferences
+    // Shared Preferences
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferencesPasscode: SharedPreferences
 
@@ -33,12 +33,11 @@ class PasscodeActivity : Activity(){
         sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE)
         sharedPreferencesPasscode = getSharedPreferences("sharedPreferencesPasscode", MODE_PRIVATE)
 
-        //getting values from Main's sharedPreferences
+        //getting values from MainActivity's Shared Preferences
         val userID = sharedPreferencesPasscode.getString("userID","default")
         val timestamp = sharedPreferencesPasscode.getLong("timestamp",1L)
         //Toast.makeText(this, userID, Toast.LENGTH_SHORT).show()
         //Toast.makeText(this, timestamp.toString(), Toast.LENGTH_SHORT).show()
-
 
         /* For showing whole process
         val editor = sharedPreferences.edit()
@@ -62,9 +61,10 @@ class PasscodeActivity : Activity(){
             binding.buttonContinue.isVisible = false
             binding.buttonContinue3.isVisible = true
         }
-        //
 
+        //
         //Continue Button onclick: input phone number, validate, start phone authentication/login
+        //
         binding.buttonContinue.setOnClickListener {
             if(binding.editTextNumberPassword1.text.isEmpty() || binding.editTextNumberPassword2.text.isEmpty() || binding.editTextNumberPassword3.text.isEmpty() || binding.editTextNumberPassword4.text.isEmpty()){
                 Toast.makeText(this, "Please enter a correct PIN",Toast.LENGTH_SHORT).show()
