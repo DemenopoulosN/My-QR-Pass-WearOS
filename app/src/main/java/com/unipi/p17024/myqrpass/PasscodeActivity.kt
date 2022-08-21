@@ -19,7 +19,7 @@ import com.unipi.p17024.myqrpass.databinding.ActivityPasscodeBinding
 class PasscodeActivity : Activity(){
     private lateinit var binding: ActivityPasscodeBinding
 
-    // Shared Preferences
+    //sharedPreferences
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferencesPasscode: SharedPreferences
 
@@ -33,17 +33,18 @@ class PasscodeActivity : Activity(){
         sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE)
         sharedPreferencesPasscode = getSharedPreferences("sharedPreferencesPasscode", MODE_PRIVATE)
 
-        //getting values from MainActivity's Shared Preferences
+        //getting values from Main's sharedPreferences
         val userID = sharedPreferencesPasscode.getString("userID","default")
         val timestamp = sharedPreferencesPasscode.getLong("timestamp",1L)
         //Toast.makeText(this, userID, Toast.LENGTH_SHORT).show()
         //Toast.makeText(this, timestamp.toString(), Toast.LENGTH_SHORT).show()
 
-        /* For showing whole process
+
+        // For showing whole process
         val editor = sharedPreferences.edit()
         editor.remove("passcode")
         editor.apply()
-         */
+
 
         val passcode = sharedPreferences.getInt("passcode", 0) // initializing passcode field
         if(passcode != 0){ // if a pin has been created -> display second screen
@@ -61,10 +62,9 @@ class PasscodeActivity : Activity(){
             binding.buttonContinue.isVisible = false
             binding.buttonContinue3.isVisible = true
         }
+        //
 
-        //
         //Continue Button onclick: input phone number, validate, start phone authentication/login
-        //
         binding.buttonContinue.setOnClickListener {
             if(binding.editTextNumberPassword1.text.isEmpty() || binding.editTextNumberPassword2.text.isEmpty() || binding.editTextNumberPassword3.text.isEmpty() || binding.editTextNumberPassword4.text.isEmpty()){
                 Toast.makeText(this, "Please enter a correct PIN",Toast.LENGTH_SHORT).show()
@@ -240,6 +240,62 @@ class PasscodeActivity : Activity(){
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (binding.editTextNumberConfirm4.text.toString().trim().isNotEmpty()) {
                     binding.editTextNumberConfirm4.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPin1.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPin1.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPin1.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPin2.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPin2.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPin2.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPin3.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPin3.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPin3.hideKeyboard()
+                }
+            }
+        })
+
+        binding.editTextNumberPin4.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (binding.editTextNumberPin4.text.toString().trim().isNotEmpty()) {
+                    binding.editTextNumberPin4.hideKeyboard()
                 }
             }
         })

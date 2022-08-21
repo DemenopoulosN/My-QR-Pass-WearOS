@@ -9,6 +9,8 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.google.android.gms.auth.api.phone.SmsRetrieverApi
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -19,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.unipi.p17024.myqrpass.databinding.ActivityMainBinding
 import java.util.concurrent.TimeUnit
 
-class MainActivity : Activity() {
+class MainActivity : Activity(){
 
     private lateinit var binding: ActivityMainBinding
 

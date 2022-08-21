@@ -34,7 +34,8 @@ class QrGeneratorActivity : Activity() {
         binding = ActivityQrGeneratorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        MainActivity.sharedPreferencesMain = getSharedPreferences("sharedPreferencesMain", MODE_PRIVATE)
+        sharedPreferencesMain = getSharedPreferences("sharedPreferencesMain", MODE_PRIVATE)
+        //MainActivity.sharedPreferencesMain = getSharedPreferences("sharedPreferencesMain", MODE_PRIVATE)
 
         val identifier = intent.getStringExtra("Identifier");
         if(identifier.equals("From_Activity_MainActivity")) {
