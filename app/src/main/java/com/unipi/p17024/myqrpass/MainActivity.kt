@@ -2,6 +2,7 @@ package com.unipi.p17024.myqrpass
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,8 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.unipi.p17024.myqrpass.databinding.ActivityMainBinding
 import java.util.concurrent.TimeUnit
 
@@ -218,14 +218,28 @@ class MainActivity : Activity(){
                     editor.apply()
                     editor2.apply()
 
-                    if (token != null) {
-                        databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
-                        databaseRef.child("Tokens").child(token).child("timestamp").setValue(System.currentTimeMillis())
 
-                        databaseRef.child("Clients").child(userID).child("Valid Subscription").setValue("yes")
-                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Name").setValue("")
-                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Surname").setValue("")
-                        databaseRef.child("Clients").child(userID).child("Personal Data").child("Phone").setValue(phone)
+                    if (token != null) {
+                        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if(!snapshot.child("Clients").child(userID).exists()){
+                                    databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
+                                    databaseRef.child("Tokens").child(token).child("timestamp").setValue(System.currentTimeMillis())
+
+                                    databaseRef.child("Clients").child(userID).child("Valid Subscription").setValue("yes")
+                                    databaseRef.child("Clients").child(userID).child("Personal Data").child("Name").setValue("")
+                                    databaseRef.child("Clients").child(userID).child("Personal Data").child("Surname").setValue("")
+                                    databaseRef.child("Clients").child(userID).child("Personal Data").child("Phone").setValue(phone)
+                                }
+                                else{
+                                    databaseRef.child("Tokens").child(token).child("userID").setValue(userID)
+                                    databaseRef.child("Tokens").child(token).child("timestamp").setValue(System.currentTimeMillis())
+                                }
+                            }
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                            }
+                        })
                     }
                 }
 
