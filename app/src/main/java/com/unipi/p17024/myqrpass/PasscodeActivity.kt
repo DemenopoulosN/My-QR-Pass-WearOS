@@ -40,10 +40,12 @@ class PasscodeActivity : Activity(){
         //Toast.makeText(this, timestamp.toString(), Toast.LENGTH_SHORT).show()
 
 
-        // For showing whole process
+        // For showing whole process on first login
+        /*
         val editor = sharedPreferences.edit()
         editor.remove("passcode")
         editor.apply()
+        */
 
 
         val passcode = sharedPreferences.getInt("passcode", 0) // initializing passcode field
