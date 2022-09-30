@@ -1,6 +1,6 @@
 # My-QR-Pass-WearOS
 
-In the present work, two applications were developed, one for smartwatches running WearOS 
+In this work, two applications were developed, one for smartwatches running WearOS 
 operating system and one for Android smartphones. The current work aims at pointing out the 
 QR code (Quick Response Code) technology and its utility in the process of identification of users 
 towards their right to entry an event. Using a QR code, it is possible to save, encode and consequently verify a person’s credentials to give 
